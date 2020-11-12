@@ -1,6 +1,6 @@
 <template>
     <div id="intro_wrap">
-        <p>Weolcome to Follow_Me</p>
+        <p id="title">Weolcome to Follow_Me</p>
         <div id="btn_wrap">
             <router-link :to="{name : 'Admin'}" id="adminImg" >
             <img src="../img/admin.png" width="300">
@@ -28,7 +28,7 @@ export default {
     width: 1200px;
     margin : 0 auto;
 }
-p{
+#title{
     text-align: center;
     font-size: 50px;
     font-weight: 700;

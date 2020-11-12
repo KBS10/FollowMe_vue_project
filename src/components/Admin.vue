@@ -16,7 +16,7 @@
       <v-tab-item v-for="item in items" :key="item">
         <v-card v-if="item === items[0]" flat >
           <v-card-text id="">
-             <p>Admin 페이지입니다.</p>
+             <h1>Admin 페이지입니다.</h1>
           </v-card-text>
         </v-card>
         <v-card v-else-if="item === items[1]" flat >
@@ -51,10 +51,6 @@ export default {
 </script>
 
 <style>
-#Admin{
-  width: 1200px;
-  margin: 0 auto;
-}
 #header{
   display: block;
   /* background-color: #87ceeb; */
@@ -70,7 +66,7 @@ export default {
 
 /* 전체 센터정렬 */
 .v-card__text {
-  /* background-color: teal; */
+  background-color: skyblue;
 }
 
 </style>

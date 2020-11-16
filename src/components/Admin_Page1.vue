@@ -74,6 +74,6 @@ export default {
 #beacon_Info{
   float: right;
   width: 350px;
-  background-color: chartreuse;
+  /* background-color: chartreuse; */
 }
 </style>

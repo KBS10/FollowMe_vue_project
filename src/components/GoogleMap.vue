@@ -1,6 +1,6 @@
 <template>
   <div id="google-map">
-      <GmapMap
+      <GmapMap id="gmap"
             :center="center"
             :zoom="20"
             style="width:800px;  height: 400px;"
@@ -24,6 +24,7 @@ export default {
         markers: [],
         places: [],
         currentPlace: null,
+        floorImages: ["../src/img/floor2.png", "../src/img/floor3.png"]
     }),
     mounted() {
         this.geolocate();
@@ -53,8 +54,11 @@ export default {
             lng: position.coords.longitude
             };
         });
-        },
+    },
+    initMap: function(){
+      
     }
+  }
 }
 </script>
 

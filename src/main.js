@@ -7,19 +7,20 @@ import vuetify from './plugins/vuetify';
 import css_Normalize from '../src/css3/css_Normalize.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VSwitch from 'v-switch-case'
-import VueSocketIO from 'vue-socket.io'
+// import VueSocketIO from 'vue-socket.io'
+
 Vue.config.productionTip = false
 
-Vue.use(VueSocketIO,{
-  debug: true,
-  connection : 'http://metinseylan.com:1992',
-  vuex:{
-    store,
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
-  },
-  options: {path: "/mp-app/"}
-});
+// Vue.use(VueSocketIO,{
+//   debug: true,
+//   connection : 'http://metinseylan.com:1992',
+//   vuex:{
+//     store,
+//     actionPrefix: 'SOCKET_',
+//     mutationPrefix: 'SOCKET_'
+//   },
+//   options: {path: "/mp-app/"}
+// });
 Vue.use(VSwitch)
 Vue.use(VueGoogleMaps,{
   load: {

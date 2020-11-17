@@ -1,18 +1,24 @@
 <template>
   <div id="google-map">
       <GmapMap id="gmap"
-            :center="center"
-            :zoom="20"
-            style="width:800px;  height: 400px;"
-          >
-          <GmapMarker
-            :key="index"
-            v-for="(m, index) in markers"
-            :position="m.position"
-            :clickable="true"
-            :draggable="true"
-            @click="center=m.position"
-          />
+        :center="center"
+        :zoom="20"
+        style="width:800px;  height: 400px;"
+      >
+      <ground-overlay
+        source="../img/floor2.png"
+        :bounds="{}"
+        :opacity="0.5"
+      >
+      </ground-overlay>
+      <GmapMarker
+        :key="index"
+        v-for="(m, index) in markers"
+        :position="m.position"
+        :clickable="true"
+        :draggable="true"
+        @click="center=m.position"
+      />
     </GmapMap>
   </div>
 </template>
@@ -28,6 +34,7 @@ export default {
     }),
     mounted() {
         this.geolocate();
+
     },
     methods : {
          // receives a place object via the autocomplete component
@@ -51,13 +58,10 @@ export default {
         navigator.geolocation.getCurrentPosition(position => {
             this.center = {
             lat: position.coords.latitude,
-            lng: position.coords.longitude
+            lng: position.coords.longitude,
             };
         });
     },
-    initMap: function(){
-      
-    }
   }
 }
 </script>

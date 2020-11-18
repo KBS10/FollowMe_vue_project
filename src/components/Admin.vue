@@ -53,14 +53,12 @@ export default {
 <style>
 #header{
   display: block;
-  /* background-color: #87ceeb; */
 }
 
 #logo{
   float: left;
 }
 .v-tab{
-  /* background-color: springgreen; */
   flex: inherit;
 }
 

@@ -8,13 +8,10 @@
       defer
     ></script>
     <style type="text/css">
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
       #map {
         height: 100%;
       }
 
-      /* Optional: Makes the sample page fill the window. */
       html,
       body {
         height: 100%;
@@ -26,28 +23,36 @@
       function initMap() {
         const map = new google.maps.Map(document.getElementById("map"), {
           zoom: 18,
-          center: { lat: 37.783, lng: -122.403 },
+          center: { lat: 35.896783, lng: 128.620941 },
         });
         const bounds = {
           17: [
-            [20969, 20970],
-            [50657, 50658],
+            [35.895479315688775, 128.61875231744386],
+            [35.89808666284133, 128.6230438518677],
           ],
           18: [
-            [41939, 41940],
-            [101315, 101317],
+            [35.89613116052809, 128.61986811639406],
+            [35.89743483410442, 128.62201388360597],
           ],
           19: [
-            [83878, 83881],
-            [202631, 202634],
+            [35.89645708093498, 128.62040455819704],
+            [35.897108917723145, 128.621477441803],
           ],
           20: [
-            [167757, 167763],
-            [405263, 405269],
+            [35.89662004063522, 128.62067277909853],
+            [35.89694595902931, 128.6212092209015],
           ],
         };
         const imageMapType = new google.maps.ImageMapType({
           getTileUrl: function (coord, zoom) {
+            if (
+              zoom < 17 ||
+              zoom > 20 ||
+              bounds[zoom][0][0] > coord.x ||
+              coord.x > bounds[zoom][0][1] ||
+              bounds[zoom][1][0] > coord.y ||
+              coord.y > bounds[zoom][1][1]
+            )
             return [
             "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
             ].join("");

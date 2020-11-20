@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Overlaying an Image Map Type</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-CgDDNOkE3xBgSIzXH2wSUPR1zu0Fio&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+    <style type="text/css">
+      #map {
+        height: 90%;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: inline-block">
+      <h3 style="display: inline-block">총 거리 :</h3>
+      <h1 style="display: inline-block" id="distance">0</h1>
+      <h3 style="display: inline-block" id="unit">km</h3>
+    </div>
+    <button onclick="initMapObj()">재설정</button>
+    <div id="map" style="height: 670px"></div>
+    
+    <script>
+      var path = [];
+      var markers = [];
+      var polyline = null;
+  
+  
+      // function initMap() {
+          
+      //   const mapOptions = {
+      //       zoom : 18.5,
+      //       center: { lat: 35.896783, lng: 128.620941 }, 
+      //       mapTypeControl: true,
+      //       mapTypeControlOptions: {
+      //       style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+      //     },
+      //   },
+      //   const map = new google.maps.Map(document.getElementById("map"), {
+      //     mapOptions,
+      //   });
+  
+      //   const elevator = new google.maps.ElevationService();
+      //   displayPathElevation(map, path, elevator);
+      //   polyline = displayPolylineOnMap(map, path);
+      // };
+      //     const bounds = {
+      //       17: [
+      //         [35.895479315688775, 128.61875231744386],
+      //         [35.89808666284133, 128.6230438518677],
+      //       ],
+      //       18: [
+      //         [35.89613116052809, 128.61986811639406],
+      //         [35.89743483410442, 128.62201388360597],
+      //       ],
+      //       19: [
+      //         [35.89645708093498, 128.62040455819704],
+      //         [35.897108917723145, 128.621477441803],
+      //       ],
+      //       20: [
+      //         [35.89662004063522, 128.62067277909853],
+      //         [35.89694595902931, 128.6212092209015],
+      //       ],
+      //     };
+      //     const imageMapType = new google.maps.ImageMapType({
+      //       getTileUrl: function (coord, zoom) {
+      //         if (
+      //           zoom < 17 ||
+      //           zoom > 20 ||
+      //           bounds[zoom][0][0] > coord.x ||
+      //           coord.x > bounds[zoom][0][1] ||
+      //           bounds[zoom][1][0] > coord.y ||
+      //           coord.y > bounds[zoom][1][1]
+      //         ) 
+      //         return [
+      //         "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
+      //         ].join("");
+      //       },
+      //       tileSize: new google.maps.Size(256, 256),
+      //     });
+      //     map.overlayMapTypes.push(imageMapType);
+        
+  
+      function initMap() {
+        // <<- 맵 초기 설정
+        const pointIcons = {
+          point: {
+            icon: {
+              url: "./src/img/beacon.png",
+              scaledSize: new google.maps.Size(30, 30),
+              anchor: new google.maps.Point(15, 15),
+            },
+          },
+        };
+  
+        const mapOptions = {
+          zoom: 18.5,
+          center: { lat: 35.896783, lng: 128.620941 },
+          disableDefaultUI: true,
+          mapTypeControl: true,
+          mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+          },
+        };
+        const map = new google.maps.Map(
+          document.getElementById("map"),
+          mapOptions,
+        );
+        const elevator = new google.maps.ElevationService();
+        displayPathElevation(map, path, elevator);
+        polyline = displayPolylineOnMap(map, path);
+        // ->>
+  
+        map.addListener("click", (event) => {
+          const clickedPosition = event.latLng.toJSON();
+          path.push(clickedPosition);
+          displayMapObject(map, markers, path, pointIcons, elevator);
+        });
+      }
+  
+      function initMapObject(markers) {
+        markers.map((element) => {
+          element.setMap(null);
+        });
+        markers.splice(0, markers.length);
+        polyline.setMap(null);
+      }
+  
+      function calculateDistance(path) {
+        let result = 0;
+  
+        if (path.length < 2) {
+          element.innerText = result;
+          return;
+        }
+  
+        for (index in path) {
+          if (path.length - 1 == index) {
+            break;
+          }
+  
+          let point1 = path[index];
+          let point2 = path[parseInt(index) + 1];
+  
+          let distance = google.maps.geometry.spherical.computeDistanceBetween(
+            new google.maps.LatLng(point1.lat, point1.lng),
+            new google.maps.LatLng(point2.lat, point2.lng),
+          );
+          result += Math.round(distance);
+        }
+        let isUnitKm = result >= 1000;
+        document.getElementById("distance").innerText = isUnitKm
+          ? result / 1000
+          : result;
+        document.getElementById("unit").innerText = isUnitKm ? "km" : "m";
+      }
+  
+      function displayMapObject(map, markers, path, pointIcons, elevator) {
+        initMapObject(markers);
+        displayMarkerOnMap(map, path, markers, pointIcons, elevator);
+        displayPathElevation(map, path, elevator);
+        calculateDistance(path);
+        polyline = displayPolylineOnMap(map, path);
+      }
+  
+      function displayMarkerOnMap(map, path, markers, pointIcons, elevator) {
+        // path 를 순회하면서 마커를 생성
+        for (index in path) {
+          const pathLength = path.length;
+          const { startPoint, endPoint, point } = pointIcons;
+          let pointIcon =
+            index == 0 ? startPoint : index == pathLength - 1 ? endPoint : point;
+          const newMarker = placeMarker(map, path[index], pointIcon);
+          markers.push(newMarker);
+        }
+  
+        let eventMarkerIndex = 0;
+        let tmpIcon = null;
+        markers.map((element) => {
+          // <<- 마커에 하이라이팅
+          element.addListener("mouseover", () => {
+            tmpIcon = element.getIcon();
+            element.setIcon(pointIcons.pointIcons.icon);
+          });
+  
+          element.addListener("mouseout", () => {
+            element.setIcon(tmpIcon);
+          });
+  
+          element.addListener("drag", () => {
+            element.setIcon(pointIcons.pointIcons.icon);
+          });
+          // ->>
+  
+          // <<- 마커 클릭 시, 마커 삭제
+          element.addListener("click", (event) => {
+            const { lat, lng } = event.latLng.toJSON();
+  
+            window.path = path.filter((item) => {
+              return !(item.lat == lat && item.lng == lng);
+            });
+            displayMapObject(map, markers, window.path, pointIcons, elevator);
+          });
+          // ->>
+  
+          // <<- 마커 이동 시, 마커 위치, 경로 변경
+          element.addListener("dragstart", (event) => {
+            const { lat, lng } = event.latLng.toJSON();
+            for (index in path) {
+              let isSamePosition =
+                lat === path[index].lat && lng === path[index].lng;
+              if (isSamePosition) {
+                eventMarkerIndex = index;
+                return;
+              }
+            }
+          });
+  
+          element.addListener("dragend", (event) => {
+            const position = event.latLng.toJSON();
+            path[eventMarkerIndex] = position;
+            displayMapObject(map, markers, path, pointIcons, elevator);
+          });
+          // ->>
+        });
+      }
+  
+      function displayPolylineOnMap(map, path, elevator) {
+        const polylineOption = {
+          path,
+          // strokeColor: "#4683EE",
+          strokeColor: "#32AF7B",
+          // strokeOpacity: 0.8,
+          strokeWeight: 10,
+          map,
+        };
+  
+        return new google.maps.Polyline(polylineOption);
+      }
+  
+      function placeMarker(map, position) {
+        const markerOption = {
+          position,
+          map,
+          draggable: true,
+          title: "마커를 이동하여, 경로를 재설정합니다.",
+        };
+  
+        return new google.maps.Marker(markerOption);
+      }
+  
+      function displayPathElevation(map, path, elevator) {
+        if (path.length < 2) {
+          const chartDiv = document.getElementById("elevation_chart");
+          return;
+        }
+        elevator.getElevationAlongPath(
+          {
+            path,
+            samples: 256,
+          },
+          plotElevation,
+        );
+      }
+  
+      function plotElevation(elevations, status) {
+        const chartDiv = document.getElementById("elevation_chart");
+  
+        if (status !== "OK") {
+          // Show the error code inside the chartDiv.
+          chartDiv.innerHTML =
+            "Cannot show elevation: request failed because " + status;
+          return;
+        }
+        const chart = new google.visualization.ColumnChart(chartDiv);
+        const data = new google.visualization.DataTable();
+        data.addColumn("string", "Sample");
+        data.addColumn("number", "Elevation");
+  
+        for (let i = 0; i < elevations.length; i++) {
+          data.addRow(["", elevations[i].elevation]);
+        }
+        // Draw the chart using the data within its DIV.
+        chart.draw(data, {
+          height: 150,
+          legend: "none",
+          titleY: "Elevation (m)",
+        });
+      }
+  
+      </script>
+  </body>
+</html>
+

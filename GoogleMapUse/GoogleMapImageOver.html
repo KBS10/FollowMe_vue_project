@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Overlaying an Image Map Type</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-CgDDNOkE3xBgSIzXH2wSUPR1zu0Fio&callback=initMap&libraries=&v=weekly"
+    defer></script>
+  <style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+      height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 90%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <script>
+    let map;
+    let markers = [];
+   
+
+    function initMap() {
+      // Map Options
+      const mapOptions = {
+        zoom: 18,
+        center: {
+          lat: 35.896783,
+          lng: 128.620941
+        },
+        disableDefaultUI: true,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+        },
+      };
+      map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    
+      // Google map 클릭 시 일어나는 event
+      map.addListener("click", (event) => {
+        addMarker(event.latLng);
+      });
+
+      // google Map bounds(중심좌표) 구하는 event
+      google.maps.event.addListener(map, "bounds_changed", function () {
+        var bounds = map.getBounds();
+        console.log(bounds);
+        var NE = bounds.getNorthEast();
+        var SW = bounds.getSouthWest();
+        var strHTML = "North East : " + NE + ", " + "<br>";
+        strHTML += "South West : " + SW + ", " + "<br>";
+        console.log(strHTML);
+        document.getElementById("info").innerHTML = strHTML;
+      })
+    } // End init function 
+
+    // 마커를 추가하는 함수
+    function addMarker(location) {
+       
+    const icons = {
+      url: 'https://user-images.githubusercontent.com/53847348/99767420-5ba24b80-2b46-11eb-8b3c-a9b686bb8c59.png',
+      scaledSize: new google.maps.Size(20, 25),
+      anchor: new google.maps.Point(10, 10),
+    }
+
+      const marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        icon: icons
+      });
+
+      // marker 위에 Info 정보 등록
+      const infowindow = new google.maps.InfoWindow({
+        content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
+      });
+      // marker 위에 Info 정보 뜨게하기
+      infowindow.open(map, marker);
+      // markers안에 배열 넣음
+      markers.push(marker);
+    }
+
+
+
+    // Sets the map on all markers in the array.
+    function setMapOnAll(map) {
+      for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
+    }
+    // 마커 하면에서 만 안보이고 배열에는 정의되어있음
+    function clearMarkers() {
+      setMapOnAll(null);
+    }
+    // 모든 마커 보이기
+    function showMarkers() {
+      setMapOnAll(map);
+    }
+    // 배열 안에 등록되어 있는 마커 모두 삭제
+    function deleteMarkers() {
+      clearMarkers();
+      markers = [];
+    }
+
+
+
+
+    const imageMapType = new google.maps.ImageMapType({
+      getTileUrl: function (coord, zoom) {
+        if (
+          zoom < 17 ||
+          zoom > 20 ||
+          bounds[zoom][0][0] > coord.x ||
+          coord.x > bounds[zoom][0][0] ||
+          bounds[zoom][1][0] > coord.y ||
+          coord.y > bounds[zoom][1][0]
+        ) {
+          return "";
+        }
+        return [
+          "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
+        ];
+      },
+      tileSize: new google.maps.Size(64, 64),
+    });
+
+    // const bounds = {
+    //   17: [
+    //     [20969, 20970],
+    //     [50657, 50658],
+    //   ],
+    //   18: [
+    //     [41939, 41940],
+    //     [101315, 101317],
+    //   ],
+    //   19: [
+    //     [83878, 83881],
+    //     [202631, 202634],
+    //   ],
+    //   20: [
+    //     [167757, 167763],
+    //     [405263, 405269],
+    //   ],
+    // };
+    const bounds = {
+        17: [
+          [35.895479315688775, 128.61875231744386],
+          [35.89808666284133, 128.6230438518677],
+        ],
+        18: [
+          [35.898109286713606, 128.62314041139223],
+          [35.895456691064844, 128.6187415886078],
+        ],
+        19: [
+          [35.89744614613451, 128.62204070569612],
+          [35.89611984831009, 128.6198412943039],
+        ],
+        20: [
+          [35.89711457376168, 128.62149085284807],
+          [35.89645142484945, 128.62039114715196],
+        ],
+      };
+    map.overlayMapTypes.push(imageMapType);
+    
+  </script>
+</head>
+
+<body>
+
+  <div id="map"></div>
+  <div id="info"></div>
+  <div id="floating-panel">
+    <input onclick="clearMarkers();" type="button" value="Hide Markers" />
+    <input onclick="showMarkers();" type="button" value="Show All Markers" />
+    <input onclick="deleteMarkers();" type="button" value="Delete Markers" />
+  </div>
+</body>
+
+</html>

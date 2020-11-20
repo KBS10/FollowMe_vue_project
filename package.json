@@ -10,6 +10,8 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "register-service-worker": "^1.7.1",
+    "socket.io-client": "^3.0.3",
+    "socketio": "^1.0.0",
     "v-switch-case": "^1.0.3",
     "vue": "^2.6.11",
     "vue-daum-map": "^1.0.15",

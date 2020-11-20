@@ -12,11 +12,28 @@
         <input type="text" id="keyword_text" name="keyword_text" size="30" required="required">
         <input type="submit" class="search" value="검색">
       </form>
+
+      <div id="socket">
+        <p v-if="isConnected">We're connected to the server!</p>
+        <p>Message from server: "{{socketMessage}}"</p>
+        <button @click="pingServer()">Ping Server</button>
+      </div>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+    }
+  },
+
+  sockets: {
+  },
+
+  methods: {
+    
+  }
 }
 </script>
 

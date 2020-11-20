@@ -6,6 +6,7 @@ Vue.use(VueRouter)
 
 const Admin = () => {return import(/* webpackChunkName: "about" */ '../components/Admin.vue')}
 const Medical = () => {return import(/* webpackChunkName: "about" */ '../components/Medical.vue')}
+const Socket = () => {return import(/* webpackChunkName: "about" */ '../components/Socket.vue')}
 const routes = [
   {
     path: '/',
@@ -21,6 +22,11 @@ const routes = [
     path: '/Medical',
     name: 'Medical',
     component : Medical
+  },
+  {
+    path: '/Socket',
+    name: 'Socket',
+    component : Socket
   }
 ]
 

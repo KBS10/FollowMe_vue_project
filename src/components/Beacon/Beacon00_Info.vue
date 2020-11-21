@@ -1,6 +1,6 @@
 <template>
   <div id="Beacon01_Plus">
-      <p>비콘 정보</p>
+      <h1>비콘 정보</h1>
 
       <form id="search_Beacon_Info" method="post">
         <select name="keyword" id="keyword">
@@ -13,11 +13,14 @@
         <input type="submit" class="search" value="검색">
       </form>
 
-      <div id="socket">
-        <p v-if="isConnected">We're connected to the server!</p>
-        <p>Message from server: "{{socketMessage}}"</p>
-        <button @click="pingServer()">Ping Server</button>
-      </div>
+      <table id="show_Beacon_Info">
+        <th>
+            <td>Major</td>
+            <td>Minor</td>
+            <td>RSSI</td>
+            <td>TX</td>
+        </th>
+      </table>
   </div>
 </template>
 
@@ -27,7 +30,7 @@ export default {
     return {
     }
   },
-
+  
   sockets: {
   },
 
@@ -53,5 +56,13 @@ export default {
 .search{
    background-color: yellow;
    width: 50px;
+}
+#show_Beacon_Info{
+  width: 100%;
+  margin-top: 10px;
+  background-color: wheat;
+}
+td{
+  width: 100px;
 }
 </style>

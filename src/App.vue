@@ -6,7 +6,7 @@
 
 <script>
 // import intro              from '../src/components/intro.vue'
-
+// import io from 'socket.io-client'
 
 export default {
   name: 'App',
@@ -14,9 +14,6 @@ export default {
   components: {
     // intro,
   },
-
-  data: () => ({
-  }),
 };
 </script>
 <style>

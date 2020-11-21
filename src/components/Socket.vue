@@ -1,48 +1,42 @@
 <template>
-    
-  <div id="socket">
-      <v-btn @click="disconnect" v-if="status === 'connected'">연결끊기</v-btn> 
-      <v-btn @click="connect" v-if="status === 'disconnected'">연결</v-btn>{{status}}
-      <div v-if="status === 'connected'">
-        <v-btn @click="pingServer()">Ping Server</v-btn>
-      </div>
+  <div id="socket_vue">
+    We're connected to the server
+    <v-btn @click="message()">message</v-btn>
+    <v-btn @click="pingServer()">Ping Server</v-btn>
   </div>
 </template>
 
 <script>
+import io from "socket.io-client";
 
 export default {
-    data() {
-        return {
-            status : "disconnected",
-            data: "",
-     }
+  data() {
+    return {
+      socket: {},
+    };
+  },
+  created() {
+    console.log("렌더링 체크! - 1");
+    this.socket = io("http://192.168.0.32:5500");
+    // this.socket = io("http://localhost:5000", {
+    //   reconnect: true,
+    //   rejectUnatuhorized: false,
+    //   secure: true,
+    // });
+  },
+  mounted() {
+    console.log("렌더링 체크!");
+  },
+  methods: {
+    message() {
+      this.socket.emit("message", "data");
+
+      console.log(this.socket);
     },
-    sockets: {
-        connect: function () {
-            console.log('socket connected');
-        },
-        disconnected: function (){
-            console.log('socket disconnected');
-        },
-        customEmit: function (data) {
-            console.log('this method was fired by the socket server. eg: io.emit("customEmit", )',data)
-        },
-        messageChannel(data) {
-            this.socketMessage = data
-        },
+
+    pingServer() {
+      this.socket.emit("pingServer", "message");
     },
-    methods: {
-        connect: function(){
-            this.status = "connected";
-        },
-        disconnect: function(){
-            this.status = "disconnected";
-        },
-        pingServer: function () {
-            this.$socket.emit('pingServer',"123")
-            console.log("emit 보냄")
-        }
-    }
-}
+  },
+};
 </script>

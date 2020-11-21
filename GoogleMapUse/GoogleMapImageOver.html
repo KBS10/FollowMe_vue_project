@@ -58,8 +58,41 @@
         strHTML += "South West : " + SW + ", " + "<br>";
         console.log(strHTML);
         document.getElementById("info").innerHTML = strHTML;
+        // addMarker(this.center);
       })
-    } // End init function 
+
+      const imageMapType = new google.maps.ImageMapType({
+      getTileUrl: function (coord, zoom) {
+        if (
+          zoom < 17 ||
+          zoom > 20 
+        ) {
+          return "";
+        }
+        return [
+          "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
+        ];
+      },
+      tileSize: new google.maps.Size(256, 256),
+    });
+
+    const bounds = {
+      18: [
+          [35.89656654697568, 35.89656654697568],
+          [35.89704281459322, 35.897028942815446],
+        ],
+        19:[
+          [35.89655365402625 ,35.89655365402625 ],
+          [35.897043793697875 ,35.89641493481787]
+        ],
+        20:[
+          [35.896550935080995 , 35.896550935080995],
+          [35.89703582997878 ,35.89703582997878],
+        ],
+    }
+    map.overlayMapTypes.push(imageMapType);
+
+  } // End init function 
 
     // 마커를 추가하는 함수
     function addMarker(location) {
@@ -78,14 +111,14 @@
 
       // marker 위에 Info 정보 등록
       const infowindow = new google.maps.InfoWindow({
-        content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
+        content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lat()
       });
+      console.log(location.lat() + ' ' +location.lat())
       // marker 위에 Info 정보 뜨게하기
       infowindow.open(map, marker);
       // markers안에 배열 넣음
       markers.push(marker);
     }
-
 
 
     // Sets the map on all markers in the array.
@@ -111,24 +144,24 @@
 
 
 
-    const imageMapType = new google.maps.ImageMapType({
-      getTileUrl: function (coord, zoom) {
-        if (
-          zoom < 17 ||
-          zoom > 20 ||
-          bounds[zoom][0][0] > coord.x ||
-          coord.x > bounds[zoom][0][0] ||
-          bounds[zoom][1][0] > coord.y ||
-          coord.y > bounds[zoom][1][0]
-        ) {
-          return "";
-        }
-        return [
-          "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
-        ];
-      },
-      tileSize: new google.maps.Size(64, 64),
-    });
+    // const imageMapType = new google.maps.ImageMapType({
+    //   getTileUrl: function (coord, zoom) {
+    //     if (
+    //       zoom < 17 ||
+    //       zoom > 20 ||
+    //       bounds[zoom][0][0] > coord.x ||
+    //       coord.x > bounds[zoom][0][0] ||
+    //       bounds[zoom][1][0] > coord.y ||
+    //       coord.y > bounds[zoom][1][0]
+    //     ) {
+    //       return "";
+    //     }
+    //     return [
+    //       "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
+    //     ];
+    //   },
+    //   tileSize: new google.maps.Size(64, 64),
+    // });
 
     // const bounds = {
     //   17: [
@@ -148,25 +181,25 @@
     //     [405263, 405269],
     //   ],
     // };
-    const bounds = {
-        17: [
-          [35.895479315688775, 128.61875231744386],
-          [35.89808666284133, 128.6230438518677],
-        ],
-        18: [
-          [35.898109286713606, 128.62314041139223],
-          [35.895456691064844, 128.6187415886078],
-        ],
-        19: [
-          [35.89744614613451, 128.62204070569612],
-          [35.89611984831009, 128.6198412943039],
-        ],
-        20: [
-          [35.89711457376168, 128.62149085284807],
-          [35.89645142484945, 128.62039114715196],
-        ],
-      };
-    map.overlayMapTypes.push(imageMapType);
+    // const bounds = {
+    //     17: [
+    //       [35.895479315688775, 128.61875231744386],
+    //       [35.89808666284133, 128.6230438518677],
+    //     ],
+    //     18: [
+    //       [35.898109286713606, 128.62314041139223],
+    //       [35.895456691064844, 128.6187415886078],
+    //     ],
+    //     19: [
+    //       [35.89744614613451, 128.62204070569612],
+    //       [35.89611984831009, 128.6198412943039],
+    //     ],
+    //     20: [
+    //       [35.89711457376168, 128.62149085284807],
+    //       [35.89645142484945, 128.62039114715196],
+    //     ],
+    //   };
+    // map.overlayMapTypes.push(imageMapType);
     
   </script>
 </head>

@@ -10,7 +10,6 @@
         <input id="input_Patient">
         <v-btn id="search"> 검색 </v-btn>
     </div>
-
     <div id="content">
         <div id="Pateint_Info">
           <Patient_Info/>

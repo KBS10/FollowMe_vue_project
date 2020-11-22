@@ -31,10 +31,7 @@
       // Map Options
       const mapOptions = {
         zoom: 18,
-        center: {
-          lat: 35.896783,
-          lng: 128.620941
-        },
+        center: {lat: 35.896783,lng: 128.620941},
         disableDefaultUI: true,
         mapTypeControl: true,
         mapTypeControlOptions: {
@@ -42,7 +39,8 @@
         },
       };
       map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    
+
+
       // Google map 클릭 시 일어나는 event
       map.addListener("click", (event) => {
         addMarker(event.latLng);
@@ -60,37 +58,65 @@
         document.getElementById("info").innerHTML = strHTML;
         // addMarker(this.center);
       })
+      
 
-      const imageMapType = new google.maps.ImageMapType({
-      getTileUrl: function (coord, zoom) {
-        if (
-          zoom < 17 ||
-          zoom > 20 
-        ) {
-          return "";
+      const srcImage = [
+        "https://user-images.githubusercontent.com/53847348/99892072-3df2f480-2cb4-11eb-9d56-bae02c75b242.png",
+        "https://user-images.githubusercontent.com/53847348/99892066-12700a00-2cb4-11eb-898f-1679f957aecc.png"
+      ]
+
+      const bounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(35.89650283057683, 128.6201298818298),
+        new google.maps.LatLng(35.89707923321034, 128.62176975983763)
+      )
+
+      class USGSOverlay extends google.maps.OverlayView{
+        constructor(bounds, image){
+          super();
+          this.bounds_ = bounds;
+          this.image_ = image;
+          this.div_null;
         }
-        return [
-          "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
-        ];
-      },
-      tileSize: new google.maps.Size(256, 256),
-    });
-
-    const bounds = {
-      18: [
-          [35.89656654697568, 35.89656654697568],
-          [35.89704281459322, 35.897028942815446],
-        ],
-        19:[
-          [35.89655365402625 ,35.89655365402625 ],
-          [35.897043793697875 ,35.89641493481787]
-        ],
-        20:[
-          [35.896550935080995 , 35.896550935080995],
-          [35.89703582997878 ,35.89703582997878],
-        ],
-    }
-    map.overlayMapTypes.push(imageMapType);
+        onAdd() {
+            this.div_ = document.createElement("div");
+            this.div_.style.position = "absolute";
+            this.div_.style.transform = "skewx()"
+            const img = document.createElement("img");
+            img.id = 'test'
+            img.src = this.image_;
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.position = "absolute";
+            this.div_.appendChild(img);
+            const panes = this.getPanes();
+            panes.overlayLayer.appendChild(this.div_);
+          }
+          draw() {
+            const overlayProjection = this.getProjection();
+            const sw = overlayProjection.fromLatLngToDivPixel(
+              this.bounds_.getSouthWest()
+            );
+            const ne = overlayProjection.fromLatLngToDivPixel(
+              this.bounds_.getNorthEast()
+            );
+            // Resize the image's div to fit the indicated dimensions.
+            if (this.div_) {
+              this.div_.style.left = sw.x + "px";
+              this.div_.style.top = ne.y + "px";
+              this.div_.style.width = ne.x - sw.x + "px";
+              this.div_.style.height = sw.y - ne.y + "px";
+            }
+          }
+          onRemove() {
+            if (this.div_) {
+              this.div_.parentNode.removeChild(this.div_);
+              this.div_ = null;
+            }
+          }
+      }
+      
+      const overlay = new USGSOverlay(bounds, srcImage[0]);
+      overlay.setMap(map);
 
   } // End init function 
 
@@ -111,9 +137,9 @@
 
       // marker 위에 Info 정보 등록
       const infowindow = new google.maps.InfoWindow({
-        content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lat()
+        content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
       });
-      console.log(location.lat() + ' ' +location.lat())
+      console.log(location.lat() + ' ' +location.lng())
       // marker 위에 Info 정보 뜨게하기
       infowindow.open(map, marker);
       // markers안에 배열 넣음
@@ -140,67 +166,6 @@
       clearMarkers();
       markers = [];
     }
-
-
-
-
-    // const imageMapType = new google.maps.ImageMapType({
-    //   getTileUrl: function (coord, zoom) {
-    //     if (
-    //       zoom < 17 ||
-    //       zoom > 20 ||
-    //       bounds[zoom][0][0] > coord.x ||
-    //       coord.x > bounds[zoom][0][0] ||
-    //       bounds[zoom][1][0] > coord.y ||
-    //       coord.y > bounds[zoom][1][0]
-    //     ) {
-    //       return "";
-    //     }
-    //     return [
-    //       "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
-    //     ];
-    //   },
-    //   tileSize: new google.maps.Size(64, 64),
-    // });
-
-    // const bounds = {
-    //   17: [
-    //     [20969, 20970],
-    //     [50657, 50658],
-    //   ],
-    //   18: [
-    //     [41939, 41940],
-    //     [101315, 101317],
-    //   ],
-    //   19: [
-    //     [83878, 83881],
-    //     [202631, 202634],
-    //   ],
-    //   20: [
-    //     [167757, 167763],
-    //     [405263, 405269],
-    //   ],
-    // };
-    // const bounds = {
-    //     17: [
-    //       [35.895479315688775, 128.61875231744386],
-    //       [35.89808666284133, 128.6230438518677],
-    //     ],
-    //     18: [
-    //       [35.898109286713606, 128.62314041139223],
-    //       [35.895456691064844, 128.6187415886078],
-    //     ],
-    //     19: [
-    //       [35.89744614613451, 128.62204070569612],
-    //       [35.89611984831009, 128.6198412943039],
-    //     ],
-    //     20: [
-    //       [35.89711457376168, 128.62149085284807],
-    //       [35.89645142484945, 128.62039114715196],
-    //     ],
-    //   };
-    // map.overlayMapTypes.push(imageMapType);
-    
   </script>
 </head>
 
@@ -214,5 +179,7 @@
     <input onclick="deleteMarkers();" type="button" value="Delete Markers" />
   </div>
 </body>
+
+
 
 </html>

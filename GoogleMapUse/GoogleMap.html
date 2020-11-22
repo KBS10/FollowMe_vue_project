@@ -33,74 +33,15 @@
       var path = [];
       var markers = [];
       var polyline = null;
-  
-  
-      // function initMap() {
-          
-      //   const mapOptions = {
-      //       zoom : 18.5,
-      //       center: { lat: 35.896783, lng: 128.620941 }, 
-      //       mapTypeControl: true,
-      //       mapTypeControlOptions: {
-      //       style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-      //     },
-      //   },
-      //   const map = new google.maps.Map(document.getElementById("map"), {
-      //     mapOptions,
-      //   });
-  
-      //   const elevator = new google.maps.ElevationService();
-      //   displayPathElevation(map, path, elevator);
-      //   polyline = displayPolylineOnMap(map, path);
-      // };
-      //     const bounds = {
-      //       17: [
-      //         [35.895479315688775, 128.61875231744386],
-      //         [35.89808666284133, 128.6230438518677],
-      //       ],
-      //       18: [
-      //         [35.89613116052809, 128.61986811639406],
-      //         [35.89743483410442, 128.62201388360597],
-      //       ],
-      //       19: [
-      //         [35.89645708093498, 128.62040455819704],
-      //         [35.897108917723145, 128.621477441803],
-      //       ],
-      //       20: [
-      //         [35.89662004063522, 128.62067277909853],
-      //         [35.89694595902931, 128.6212092209015],
-      //       ],
-      //     };
-      //     const imageMapType = new google.maps.ImageMapType({
-      //       getTileUrl: function (coord, zoom) {
-      //         if (
-      //           zoom < 17 ||
-      //           zoom > 20 ||
-      //           bounds[zoom][0][0] > coord.x ||
-      //           coord.x > bounds[zoom][0][1] ||
-      //           bounds[zoom][1][0] > coord.y ||
-      //           coord.y > bounds[zoom][1][1]
-      //         ) 
-      //         return [
-      //         "https://user-images.githubusercontent.com/53847348/99391859-23202900-291e-11eb-8e5c-e60fdd8e6430.png"
-      //         ].join("");
-      //       },
-      //       tileSize: new google.maps.Size(256, 256),
-      //     });
-      //     map.overlayMapTypes.push(imageMapType);
-        
-  
+
       function initMap() {
         // <<- 맵 초기 설정
-        const pointIcons = {
-          point: {
-            icon: {
-              url: "./src/img/beacon.png",
-              scaledSize: new google.maps.Size(30, 30),
-              anchor: new google.maps.Point(15, 15),
-            },
-          },
-        };
+
+        const icons = {
+          url: 'https://user-images.githubusercontent.com/53847348/99767420-5ba24b80-2b46-11eb-8b3c-a9b686bb8c59.png',
+          scaledSize: new google.maps.Size(20, 25),
+          anchor: new google.maps.Point(10, 10),
+        }
   
         const mapOptions = {
           zoom: 18.5,
@@ -123,8 +64,66 @@
         map.addListener("click", (event) => {
           const clickedPosition = event.latLng.toJSON();
           path.push(clickedPosition);
-          displayMapObject(map, markers, path, pointIcons, elevator);
+          displayMapObject(map, markers, path, icons, elevator);
         });
+
+        const srcImage = [
+        "https://user-images.githubusercontent.com/53847348/99892072-3df2f480-2cb4-11eb-9d56-bae02c75b242.png",
+        "https://user-images.githubusercontent.com/53847348/99892066-12700a00-2cb4-11eb-898f-1679f957aecc.png"
+      ]
+
+      const bounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(35.89650283057683, 128.6201298818298),
+        new google.maps.LatLng(35.89707923321034, 128.62176975983763)
+      )
+
+      class USGSOverlay extends google.maps.OverlayView{
+        constructor(bounds, image){
+          super();
+          this.bounds_ = bounds;
+          this.image_ = image;
+          this.div_null;
+        }
+        onAdd() {
+            this.div_ = document.createElement("div");
+            this.div_.style.position = "absolute";
+            this.div_.style.transform = "skewx()"
+            const img = document.createElement("img");
+            img.id = 'test'
+            img.src = this.image_;
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.position = "absolute";
+            this.div_.appendChild(img);
+            const panes = this.getPanes();
+            panes.overlayLayer.appendChild(this.div_);
+          }
+          draw() {
+            const overlayProjection = this.getProjection();
+            const sw = overlayProjection.fromLatLngToDivPixel(
+              this.bounds_.getSouthWest()
+            );
+            const ne = overlayProjection.fromLatLngToDivPixel(
+              this.bounds_.getNorthEast()
+            );
+            // Resize the image's div to fit the indicated dimensions.
+            if (this.div_) {
+              this.div_.style.left = sw.x + "px";
+              this.div_.style.top = ne.y + "px";
+              this.div_.style.width = ne.x - sw.x + "px";
+              this.div_.style.height = sw.y - ne.y + "px";
+            }
+          }
+          onRemove() {
+            if (this.div_) {
+              this.div_.parentNode.removeChild(this.div_);
+              this.div_ = null;
+            }
+          }
+      }
+      
+      const overlay = new USGSOverlay(bounds, srcImage[0]);
+      overlay.setMap(map);
       }
   
       function initMapObject(markers) {
@@ -164,22 +163,20 @@
         document.getElementById("unit").innerText = isUnitKm ? "km" : "m";
       }
   
-      function displayMapObject(map, markers, path, pointIcons, elevator) {
+      function displayMapObject(map, markers, path, icons, elevator) {
         initMapObject(markers);
-        displayMarkerOnMap(map, path, markers, pointIcons, elevator);
+        displayMarkerOnMap(map, path, markers, icons, elevator);
         displayPathElevation(map, path, elevator);
         calculateDistance(path);
         polyline = displayPolylineOnMap(map, path);
       }
   
-      function displayMarkerOnMap(map, path, markers, pointIcons, elevator) {
+      function displayMarkerOnMap(map, path, markers, icons, elevator) {
         // path 를 순회하면서 마커를 생성
         for (index in path) {
           const pathLength = path.length;
-          const { startPoint, endPoint, point } = pointIcons;
-          let pointIcon =
-            index == 0 ? startPoint : index == pathLength - 1 ? endPoint : point;
-          const newMarker = placeMarker(map, path[index], pointIcon);
+          const { startPoint, endPoint, point } = icons;
+          const newMarker = placeMarker(map, path[index], icons);
           markers.push(newMarker);
         }
   
@@ -189,7 +186,7 @@
           // <<- 마커에 하이라이팅
           element.addListener("mouseover", () => {
             tmpIcon = element.getIcon();
-            element.setIcon(pointIcons.pointIcons.icon);
+            element.setIcon(icons);
           });
   
           element.addListener("mouseout", () => {
@@ -197,7 +194,7 @@
           });
   
           element.addListener("drag", () => {
-            element.setIcon(pointIcons.pointIcons.icon);
+            element.setIcon(icons);
           });
           // ->>
   
@@ -208,7 +205,7 @@
             window.path = path.filter((item) => {
               return !(item.lat == lat && item.lng == lng);
             });
-            displayMapObject(map, markers, window.path, pointIcons, elevator);
+            displayMapObject(map, markers, window.path, icons, elevator);
           });
           // ->>
   
@@ -228,7 +225,7 @@
           element.addListener("dragend", (event) => {
             const position = event.latLng.toJSON();
             path[eventMarkerIndex] = position;
-            displayMapObject(map, markers, path, pointIcons, elevator);
+            displayMapObject(map, markers, path, icons, elevator);
           });
           // ->>
         });

@@ -5,18 +5,12 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import css_Normalize from '../src/css3/css_Normalize.css'
-import * as VueGoogleMaps from 'vue2-google-maps'
+// import * as VueGoogleMaps from 'vue2-google-maps'
 import VSwitch from 'v-switch-case'
 
 //socket io
 // import * as io from "socket.io-client";
 // import VueSocketIO from "vue-socket.io";
-// Vue.use(
-//   new VueSocketIO({
-//     debug: true,
-//     connection: io('http://192.168.0.32:5500'), //options object is Optional
-//   })
-// );
 
 // import VueSocketIO from 'vue-socket.io'
 // import SocketIO from 'socket.io-client'
@@ -37,11 +31,11 @@ Vue.config.productionTip = false
 // Vue.use(VueSocketIO, SocketInstance)
 
 Vue.use(VSwitch)
-Vue.use(VueGoogleMaps,{
-  load: {
-    key: "AIzaSyDa-CgDDNOkE3xBgSIzXH2wSUPR1zu0Fio",
-  }
-});
+// Vue.use(VueGoogleMaps,{
+//   load: {
+//     key: "AIzaSyDa-CgDDNOkE3xBgSIzXH2wSUPR1zu0Fio",
+//   }
+// });
 
 
 new Vue({

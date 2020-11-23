@@ -10,32 +10,28 @@
       </div>
 
       <div v-switch="component" id="Node_Info">
-        <div v-case="'노드 추가'">
-          <NodePlus/>
-        </div>
-        <div v-case="'노드 삭제'">
-         <NodeDelete/>
+        <div v-case="'노드 추가 및 삭제'">
+          <Node_Control/>
         </div>
         <div v-case="'노드 연결'">
-          <NodeConnect/>
+         <Node_Connect/>
         </div>
       </div>
   </div>
 </template>
 
 <script>
-import GoogleMap      from "./GoogleMap"
-import NodePlus       from "./Node/Node01_Plus"
-import NodeDelete     from "./Node/Node02_Delete"
-import NodeConnect    from "./Node/Node03_Connect"
+import GoogleMap          from "./GoogleMap"
+import Node_Control       from "./Node/Node_Control"
+import Node_Connect       from "./Node/Node_Connect"
 export default {
   components : {
-    GoogleMap, NodePlus, NodeDelete, NodeConnect
+    GoogleMap, Node_Connect, Node_Control
   },
   data() {
       return {
-        component : "노드 추가",
-        componentsArray : ["노드 추가", "노드 삭제", "노드 연결"]
+        component : "노드 추가 및 삭제",
+        componentsArray : ["노드 추가 및 삭제", "노드 연결"]
       };
   },
   methods: {

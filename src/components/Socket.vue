@@ -2,7 +2,8 @@
   <div id="socket_vue">
     We're connected to the server
     <v-btn @click="message()">message</v-btn>
-    <v-btn @click="pingServer()">Ping Server</v-btn>
+    <v-btn @click="beaconInfo()">beaconInfo</v-btn>
+    <v-btn @click="pingServer()">pingServer</v-btn>
   </div>
 </template>
 
@@ -17,25 +18,10 @@ export default {
   },
   created() {
     console.log("렌더링 체크! - 1");
-    // this.socket = io("http://192.168.0.32:5500");
-    // console.log(this.socket)
-    // this.socket = io.io("", {
-    //   reconnect: true,
-    //   rejectUnatuhorized: false,
-    //   secure: true,
-    // });
   },
   mounted() {
     console.log("렌더링 체크!");
     this.socket.emit("pingServer", "message");
-    // this.socket.on("pingServer", (data) => {
-    //   console.log(data);
-    //   this.socket.emit("users");
-    // })
-    // this.socket.emit("pingServer");
-    // this.socket.on("users", (data) => {
-    //   console.log("users",data);
-    // })
   },
   sockets:{
     connect: function () {
@@ -45,17 +31,20 @@ export default {
   methods: {
     message() {
       this.socket.emit("message", "data");
-
       console.log(this.socket);
     },
-
-    pingServer() {
-      this.socket.emit("pingServer", "씨발");
-      console.log("씨발")
-      this.socket.on("pingServer",data => {
+    beaconInfo() {
+      this.socket.emit("pingServer", "Ping server 보내");
+      console.log("beacon 정보 보냄")
+      this.socket.on("beaconInfo",data => {
+        console.log("beacon")
         console.log(data);
       })
     },
+    pingServer(){
+      this.socket.emit("beaconInfo", "beacon 정보 보냄");
+      console.log("ping Server 서버에게 emit 요청")
+    }
   },
 };
 </script>

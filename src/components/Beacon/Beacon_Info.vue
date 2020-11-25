@@ -1,5 +1,5 @@
 <template>
-  <div id="Beacon01_Plus">
+  <div id="Beacon_Info">
       <h1>비콘 정보</h1>
 
       <form id="search_Beacon_Info" method="post">
@@ -25,19 +25,29 @@
 </template>
 
 <script>
+// import io from "socket.io-client";
 export default {
   data() {
     return {
+      beaconInfo: {},
+      // socket: io("http://localhost:3000/"),
     }
   },
-  
-  sockets: {
+  sockets:{
+    connect: function () {
+      console.log('socket to notification channel connected')
+    },
   },
-
+  mounted(){
+      this.socket.on("beaconInfo",data => {
+        console.log("beacon")
+        console.log(data);
+      })
+  },
   methods: {
-    
-  }
+  },
 }
+
 </script>
 
 <style>

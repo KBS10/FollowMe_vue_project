@@ -1,5 +1,5 @@
 <template>
-  <div id="Beacon01_Plus">
+  <div id="Beacon_Control">
       <p>비콘 추가</p>
   </div>
 </template>

@@ -87,10 +87,6 @@ export default {
       const overlay = new USGSOverlay(bounds, this.srcImage.floor2);
       overlay.setMap(this.map);
       
-    // Add click event
-    window.google.maps.event.addListener("click", (event) => {
-      this.addMarker(event.LatLng)
-    })
     },
     addMarker(location){
       const icons = {

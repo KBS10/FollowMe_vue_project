@@ -15,64 +15,62 @@
 
       <table id="show_Beacon_Info">
         <th>
+            <td>ScannerID</td>
             <td>Major</td>
             <td>Minor</td>
             <td>RSSI</td>
-            <td>TX</td>
         </th>
+        <tr v-for="(beaconInfos, Minor) in beaconInfo" :key="Minor" :AdminBeaconPage="beaconInfo">
+            <td>{{ beaconInfos.scannerID }}</td>
+            <td>{{ beaconInfos.Major }}</td>
+            <td>{{ beaconInfos.Minor }}</td>
+            <td>{{ beaconInfos.RSSI }}</td>
+        </tr>
+
       </table>
   </div>
 </template>
 
 <script>
-// import io from "socket.io-client";
 export default {
-  data() {
-    return {
-      beaconInfo: {},
-      // socket: io("http://localhost:3000/"),
-    }
-  },
-  sockets:{
-    connect: function () {
-      console.log('socket to notification channel connected')
+  components: {},
+  props: {
+    beaconInfo: {
+      type: Array,
     },
   },
-  mounted(){
-      this.socket.on("beaconInfo",data => {
-        console.log("beacon")
-        console.log(data);
-      })
+  data() {
+    return {};
   },
-  methods: {
-  },
-}
-
+  created() {},
+  async mounted() {},
+  methods: {},
+};
 </script>
 
 <style>
-#search_Beacon_Info{
+#search_Beacon_Info {
   background-color: blanchedalmond;
 }
-#keyword{
+#keyword {
   margin-left: 10px;
   background-color: white;
   text-align: center;
 }
-#keyword_text{
+#keyword_text {
   margin: 5px;
   background-color: white;
 }
-.search{
-   background-color: yellow;
-   width: 50px;
+.search {
+  background-color: yellow;
+  width: 50px;
 }
-#show_Beacon_Info{
+#show_Beacon_Info {
   width: 100%;
   margin-top: 10px;
   background-color: wheat;
 }
-td{
+td {
   width: 100px;
 }
 </style>

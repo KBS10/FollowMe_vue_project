@@ -14,7 +14,7 @@
 
     <!-- 비콘을 설정할 수 있는 지도 표시 -->
     <div id="GoogleMap">
-      <GoogleMap />
+      <GoogleMap  :handelOnClick=eventOn />
     </div>
 
     <!-- 비콘에 대해 추가, 삭제, 이상 비콘 확인  -->
@@ -35,28 +35,34 @@ import Beacon_Info from "./Beacon/Beacon_Info";
 import Beacon_Control from "./Beacon/Beacon_Control";
 // import io from "socket.io-client";
 
-const BraconInfoObj = (function start() {
-   function BeaconInfo (scannerID, Major, Minor, RSSI, lat, lng ){
-    this.lat = lat == undefined ? null : lat ;
-    this.lng = lng == undefined ? null : lng ;
-    this.scannerID = scannerID;
-    this.Major = Major;
-    this.Minor = Minor;
-    this.RSSI = RSSI;
-    return this;
-  }
-  return BeaconInfo ;
-})() ;
+// const BraconInfoObj = (function start() {
+//    function BeaconInfo (UUID, scannerID, Major, Minor, RSSI, lat, lng ){
+//     this.UUID = UUID;
+//     this.lat = lat == undefined ? null : lat ;
+//     this.lng = lng == undefined ? null : lng ;
+//     this.scannerID = scannerID;
+//     this.Major = Major;
+//     this.Minor = Minor;
+//     this.RSSI = RSSI;
+//     return this;
+//   }
+//   return BeaconInfo ;
+// })() ;
 
 export default {
-  BraconInfoObj,
+  // BraconInfoObj,
   components: {
     GoogleMap,
     Beacon_Info,
     Beacon_Control,
   },
+  props:[
+    'handelOnClick',
+  ]
+  ,
   data() {
     return {
+      eventOn: false,
       // socket: io("http://localhost:3000/"),
       beaconInfo: [],
       component: "비콘 추가 및 삭제",
@@ -68,19 +74,22 @@ export default {
   },
   created() {},
   mounted() {
-    this.socket.on("beaconInfo", (data) => {
-      this.beaconInfo = data;
-
-      for(let i = 0; i < data.length; i++){
-        this.beaconInfo[i] = new BraconInfoObj
-      }
-    });
+    // this.socket.on("beaconInfo", (data) => {
+    //   this.beaconInfo = data;
+    //   console.log(this.beaconInfo)
+    // });
   },
   methods: {
     swapComponent: function (item) {
-      this.currentComponent = item;
-      console.log(this.currentComponent);
       this.component = item;
+      console.log(this.component);
+      if(this.component == "비콘 추가 및 삭제"){
+        this.eventOn = true;
+        console.log(this.eventOn)
+      }else if(this.component == "비콘 정보 및 신호 불량 비콘 확인"){
+        this.eventOn = false;
+        console.log(this.eventOn)
+      }
     },
   },
 };

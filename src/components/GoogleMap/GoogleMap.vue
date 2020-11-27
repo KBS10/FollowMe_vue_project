@@ -7,7 +7,9 @@
 <script>
 import { EventBus } from "../../utils/bus";
 export default {
+  props: ["handelOnClick"],
   data: () => ({
+    eventOn: false,
     // Google Map 객체 저장
     map: null,
     markers: [],
@@ -31,6 +33,8 @@ export default {
     beaconImage:
       "https://user-images.githubusercontent.com/53847348/99767420-5ba24b80-2b46-11eb-8b3c-a9b686bb8c59.png",
   }),
+  computed: {
+  },
   created() {},
   mounted() {
     this.initMap();
@@ -42,12 +46,20 @@ export default {
         this.mapOptions
       );
 
-      this.map = map
+      this.map = map;
 
-      EventBus.$emit("test", this.map);
+      // 어떤 컴포넌트에서 this.map 객체를 받을 수 있게하는 Event
+      EventBus.$emit("Map", this.map);
 
+      // 비콘의 위치(Marker) 추가
       map.addListener("click", (event) => {
-        this.addMarker(event.latLng)
+        // 부모컴포넌트(Admin_Page1) 에서 받은 
+        // handelOnClick 이 true일 경우(비콘 추가 및 삭제) 마커 축가
+        // handleOnClick 이 false일 경우(비콘 정보 및 신호 불량 비콘 확인)
+        if(this.handelOnClick == true){
+          this.addMarker(event.latLng);
+          // console.log(this.handelOnClick);
+        }
       })
 
       const bounds = new window.google.maps.LatLngBounds(
@@ -99,23 +111,23 @@ export default {
           }
         }
       }
-      const overlay = new USGSOverlay(bounds, this.floorimage.floor2);
+      const overlay = new USGSOverlay(bounds, this.floorimage.floor3);
       overlay.setMap(map);
     },
 
-    addMarker(location){
+    addMarker(location) {
       const icons = {
         url: this.beaconImage,
-        scaledSize: new window.google.maps.Size(20,25),
-        anchor: new window.google.maps.Point(10, 10)
-      }
+        scaledSize: new window.google.maps.Size(20, 25),
+        anchor: new window.google.maps.Point(10, 10),
+      };
       const marker = new window.google.maps.Marker({
         position: location,
         map: this.map,
-        icon: icons
-      })
+        icon: icons,
+      });
       this.markers.push(marker);
-      console.log(this.markers[0].position)
+      console.log(this.markers[0].position);
     },
   },
 };

@@ -1,33 +1,42 @@
 <template>
   <div id="Beacon_Info">
-      <h1>비콘 정보</h1>
+    <h1>비콘 정보</h1>
 
-      <form id="search_Beacon_Info" method="post">
-        <select name="keyword" id="keyword">
-          <option value="UUID">UUID</option>
-          <option value="MAJOR">MAJOR</option>
-          <option value="MINOR">MINOR</option>
-          <option value="RSSI">RSSI</option>
-        </select>
-        <input type="text" id="keyword_text" name="keyword_text" size="30" required="required">
-        <input type="submit" class="search" value="검색">
-      </form>
+    <form id="search_Beacon_Info" method="post">
+      <select name="keyword" id="keyword">
+        <option value="UUID">UUID</option>
+        <option value="MAJOR">MAJOR</option>
+        <option value="MINOR">MINOR</option>
+        <option value="RSSI">RSSI</option>
+      </select>
+      <input
+        type="text"
+        id="keyword_text"
+        name="keyword_text"
+        size="30"
+        required="required"
+      />
+      <input type="submit" class="search" value="검색" />
+    </form>
 
-      <table id="show_Beacon_Info">
-        <th>
-            <td>ScannerID</td>
-            <td>Major</td>
-            <td>Minor</td>
-            <td>RSSI</td>
-        </th>
-        <tr v-for="(beaconInfos, Minor) in beaconInfo" :key="Minor" :AdminBeaconPage="beaconInfo">
-            <td>{{ beaconInfos.scannerID }}</td>
-            <td>{{ beaconInfos.Major }}</td>
-            <td>{{ beaconInfos.Minor }}</td>
-            <td>{{ beaconInfos.RSSI }}</td>
-        </tr>
-
-      </table>
+    <table id="show_Beacon_Info">
+      <tr id="beaconCategory">
+        <td>ScannerID</td>
+        <td>Major</td>
+        <td>Minor</td>
+        <td>RSSI</td>
+      </tr>
+      <tr
+        v-for="info in beaconInfo"
+        :key="info.Minor"
+        :AdminBeaconPage="beaconInfo"
+      >
+        <td>{{ info.scannerID }}</td>
+        <td>{{ info.Major }}</td>
+        <td>{{ info.Minor }}</td>
+        <td>{{ info.RSSI }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -50,7 +59,7 @@ export default {
 
 <style>
 #search_Beacon_Info {
-  background-color: blanchedalmond;
+  /* background-color: blanchedalmond; */
 }
 #keyword {
   margin-left: 10px;
@@ -59,18 +68,25 @@ export default {
 }
 #keyword_text {
   margin: 5px;
+  height: 20px;
   background-color: white;
 }
 .search {
   background-color: yellow;
   width: 50px;
+  height: 20px;
 }
 #show_Beacon_Info {
   width: 100%;
   margin-top: 10px;
   background-color: wheat;
+  text-align: center;
+  font-weight: bold;
+}
+#beaconCategory {
+  background-color: rgb(255, 143, 166);
 }
 td {
-  width: 100px;
+  width: 150px;
 }
 </style>

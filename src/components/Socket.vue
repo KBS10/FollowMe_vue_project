@@ -23,9 +23,9 @@ export default {
     console.log("렌더링 체크!");
     this.socket.emit("pingServer", "message");
   },
-  sockets:{
+  sockets: {
     connect: function () {
-      console.log('socket to notification channel connected')
+      console.log("socket to notification channel connected");
     },
   },
   methods: {
@@ -35,16 +35,16 @@ export default {
     },
     beaconInfo() {
       this.socket.emit("pingServer", "Ping server 보내");
-      console.log("beacon 정보 보냄")
-      this.socket.on("beaconInfo",data => {
-        console.log("beacon")
+      console.log("beacon 정보 보냄");
+      this.socket.on("beaconInfo", (data) => {
+        console.log("beacon");
         console.log(data);
-      })
+      });
     },
-    pingServer(){
+    pingServer() {
       this.socket.emit("beaconInfo", "beacon 정보 보냄");
-      console.log("ping Server 서버에게 emit 요청")
-    }
+      console.log("ping Server 서버에게 emit 요청");
+    },
   },
 };
 </script>

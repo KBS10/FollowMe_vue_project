@@ -35,31 +35,29 @@
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-#Patient_History{
+#Patient_History {
   text-align: center;
 }
-#history_Header{
+#history_Header {
   background-color: rgb(84, 181, 220);
   color: white;
 }
-#history_Choose{
-  display :inline-block;
+#history_Choose {
+  display: inline-block;
   padding: 0px 10px;
 }
-.history_Table{
+.history_Table {
   text-align: center;
 }
-.history_Table th{
+.history_Table th {
   background-color: rgb(84, 181, 220);
-  color: white;;
+  color: white;
 }
-.history_Table td{
+.history_Table td {
   width: 100px;
   border: 1px solid;
 }

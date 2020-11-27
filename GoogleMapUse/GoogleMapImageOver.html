@@ -40,9 +40,10 @@
       };
       map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-
+      console.log(map)
       // Google map 클릭 시 일어나는 event
       map.addListener("click", (event) => {
+        console.log(event)
         addMarker(event.latLng);
       });
 

@@ -18,6 +18,14 @@
       />
       <input type="submit" class="search" value="검색" />
     </form>
+    <!-- <input
+      class="beacon-search"
+      type="text"
+      v-model="search"
+      placeholder="비콘 정보 검색"
+      @input="handleSearchInput"
+      @keydown.tab="KeydownTab"
+    /> -->
 
     <table id="show_Beacon_Info">
       <tr id="beaconCategory">
@@ -27,9 +35,8 @@
         <td>RSSI</td>
       </tr>
       <tr
-        v-for="info in beaconInfo"
+        v-for="info in $store.state.beaconInfo"
         :key="info.Minor"
-        :AdminBeaconPage="beaconInfo"
       >
         <td>{{ info.scannerID }}</td>
         <td>{{ info.Major }}</td>
@@ -43,24 +50,36 @@
 <script>
 export default {
   components: {},
-  props: {
-    beaconInfo: {
-      type: Array,
-    },
-  },
   data() {
-    return {};
+    return {
+      search: "",
+    };
   },
   created() {},
   async mounted() {},
-  methods: {},
+  methods: {
+    // handleSearchInput(e) {
+    //   this.search = e.target.value;
+    //   if (this.search.length !== 0) {
+    //     clearTimeout(this.debounce);
+    //     this.debounce = setTimeout(() => {
+    //       const filteredList = this.stageInfoList.filter((item) =>
+    //         item.title.includes(this.search)
+    //       );
+    //       this.searchList = filteredList;
+    //     }, 500);
+    //   } else {
+    //     clearTimeout(this.debounce);
+    //     this.debounce = setTimeout(() => {
+    //       this.searchList = [];
+    //     }, 500);
+    //   }
+    // },
+  },
 };
 </script>
 
 <style>
-#search_Beacon_Info {
-  /* background-color: blanchedalmond; */
-}
 #keyword {
   margin-left: 10px;
   background-color: white;

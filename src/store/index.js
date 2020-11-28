@@ -4,10 +4,15 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
+  state: {// data
+    beaconInfo  : [],
     markers : [],
+    map : null,
   },
-  mutations: {
+  getters: {// computed
+
+  },
+  mutations: { 
   },
   actions: {
   },

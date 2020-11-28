@@ -11,8 +11,7 @@ export default {
   data: () => ({
     eventOn: false,
     // Google Map 객체 저장
-    map: null,
-    markers: [],
+    // map: null,
     // location : {},
     // Google Map 옵션 저장
     mapOptions: {
@@ -41,18 +40,16 @@ export default {
   },
   methods: {
     initMap() {
-      const map = new window.google.maps.Map(
+      this.$store.state.map = new window.google.maps.Map(
         document.getElementById("map"),
         this.mapOptions
       );
-
-      this.map = map;
 
       // 어떤 컴포넌트에서 this.map 객체를 받을 수 있게하는 Event
       EventBus.$emit("Map", this.map);
 
       // 비콘의 위치(Marker) 추가
-      map.addListener("click", (event) => {
+      this.$store.state.map.addListener("click", (event) => {
         // 부모컴포넌트(Admin_Page1) 에서 받은 
         // handelOnClick 이 true일 경우(비콘 추가 및 삭제) 마커 축가
         // handleOnClick 이 false일 경우(비콘 정보 및 신호 불량 비콘 확인)
@@ -61,12 +58,12 @@ export default {
           // console.log(this.handelOnClick);
         }
       })
-
+      // bounds - 왼쪽하단의 좌표와, 오른쪽 상단의 좌표를 구함.
       const bounds = new window.google.maps.LatLngBounds(
         new window.google.maps.LatLng(35.89651393057683, 128.6201298818298),
         new window.google.maps.LatLng(35.89707923321034, 128.62176975983763)
       );
-
+      // 구글맵 위에 이미지 오버레이 하는 클래스
       class USGSOverlay extends window.google.maps.OverlayView {
         constructor(bounds, image) {
           super();
@@ -112,7 +109,7 @@ export default {
         }
       }
       const overlay = new USGSOverlay(bounds, this.floorimage.floor3);
-      overlay.setMap(map);
+      overlay.setMap(this.$store.state.map);
     },
 
     addMarker(location) {
@@ -123,11 +120,12 @@ export default {
       };
       const marker = new window.google.maps.Marker({
         position: location,
-        map: this.map,
+        map: this.$store.state.map,
         icon: icons,
       });
-      this.markers.push(marker);
-      console.log(this.markers[0].position);
+      this.$store.state.markers.push(marker);
+
+      
     },
   },
 };

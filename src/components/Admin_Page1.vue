@@ -23,7 +23,7 @@
         <Beacon_Control />
       </div>
       <div v-case="'비콘 정보 및 신호 불량 비콘 확인'">
-        <Beacon_Info :beaconInfo="beaconInfo" />
+        <Beacon_Info />
       </div>
     </div>
   </div>
@@ -33,24 +33,9 @@
 import GoogleMap from "./GoogleMap/GoogleMap";
 import Beacon_Info from "./Beacon/Beacon_Info";
 import Beacon_Control from "./Beacon/Beacon_Control";
-// import io from "socket.io-client";
-
-// const BraconInfoObj = (function start() {
-//    function BeaconInfo (UUID, scannerID, Major, Minor, RSSI, lat, lng ){
-//     this.UUID = UUID;
-//     this.lat = lat == undefined ? null : lat ;
-//     this.lng = lng == undefined ? null : lng ;
-//     this.scannerID = scannerID;
-//     this.Major = Major;
-//     this.Minor = Minor;
-//     this.RSSI = RSSI;
-//     return this;
-//   }
-//   return BeaconInfo ;
-// })() ;
+import io from "socket.io-client";
 
 export default {
-  // BraconInfoObj,
   components: {
     GoogleMap,
     Beacon_Info,
@@ -63,8 +48,7 @@ export default {
   data() {
     return {
       eventOn: false,
-      // socket: io("http://localhost:3000/"),
-      beaconInfo: [],
+      socket: io("http://localhost:3000/"),
       component: "비콘 추가 및 삭제",
       componentsArray: [
         "비콘 추가 및 삭제",
@@ -74,10 +58,10 @@ export default {
   },
   created() {},
   mounted() {
-    // this.socket.on("beaconInfo", (data) => {
-    //   this.beaconInfo = data;
-    //   console.log(this.beaconInfo)
-    // });
+    this.socket.on("beaconInfo", (data) => {
+      this.$store.state.beaconInfo = data;
+      // console.log(this.$store.state.beaconInfo)
+    });
   },
   methods: {
     swapComponent: function (item) {
@@ -109,7 +93,7 @@ export default {
 
 #beacon_Info_wrap {
   float: right;
-  width: 350px;
+  width: 365px;
   /* background-color: chartreuse; */
 }
 </style>

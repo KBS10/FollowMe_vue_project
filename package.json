@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "register-service-worker": "^1.7.1",
     "socket.io-client": "^3.0.3",
@@ -56,5 +57,5 @@
     "last 2 versions",
     "not dead"
   ],
-  "proxy" : "http://192.168.0.32:5500"
+  "proxy": "http://192.168.0.32:5500"
 }

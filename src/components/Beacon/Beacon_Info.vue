@@ -35,7 +35,7 @@
         <td>RSSI</td>
       </tr>
       <tr
-        v-for="info in $store.state.beaconInfo"
+        v-for="info in $store.state.socketBeaconInfo"
         :key="info.Minor"
       >
         <td>{{ info.scannerID }}</td>

@@ -26,6 +26,14 @@
         <Beacon_Info />
       </div>
     </div>
+
+    <div v-switch="component">
+      <div v-case="'비콘 추가 및 삭제'">
+        <Beacon_Info_Input id="beacon_input"/>
+      </div>
+    </div>
+
+
   </div>
 </template>
 
@@ -33,13 +41,15 @@
 import GoogleMap from "./GoogleMap/GoogleMap";
 import Beacon_Info from "./Beacon/Beacon_Info";
 import Beacon_Control from "./Beacon/Beacon_Control";
-import io from "socket.io-client";
+import Beacon_Info_Input from "./Beacon/Beacon_Info_Input";
+// import io from "socket.io-client";
 
 export default {
   components: {
     GoogleMap,
     Beacon_Info,
     Beacon_Control,
+    Beacon_Info_Input,
   },
   props:[
     'handelOnClick',
@@ -48,7 +58,8 @@ export default {
   data() {
     return {
       eventOn: false,
-      socket: io("http://localhost:3000/"),
+      // 소켓 서버 접속
+      // socket: io("http://localhost:3000/"),
       component: "비콘 추가 및 삭제",
       componentsArray: [
         "비콘 추가 및 삭제",
@@ -58,15 +69,19 @@ export default {
   },
   created() {},
   mounted() {
-    this.socket.on("beaconInfo", (data) => {
-      this.$store.state.beaconInfo = data;
-      // console.log(this.$store.state.beaconInfo)
-    });
+    // 소켓 on으로 node.js 소켓서버에서 보내는 Data 받음
+    // this.socket.on("beaconInfo", (data) => {
+    //   this.$store.state.socketBeaconInfo = data;
+    //   console.log(this.$store.state.socketBeaconInfo)
+    // });
   },
   methods: {
+    // 버튼에 따라 컴포넌트 변경하는 함수
     swapComponent: function (item) {
       this.component = item;
       console.log(this.component);
+      // 비콘 추가 및 삭제 true / 비콘 정보 및 신호 불량 비콘 확인 false 를통해 
+      // 해당 페이지에서 구글 맵 marker를 set 제한
       if(this.component == "비콘 추가 및 삭제"){
         this.eventOn = true;
         console.log(this.eventOn)
@@ -95,5 +110,10 @@ export default {
   float: right;
   width: 365px;
   /* background-color: chartreuse; */
+}
+
+#beacon_input{
+  display: block;
+  width: 100%;
 }
 </style>

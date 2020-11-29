@@ -6,6 +6,10 @@
         <v-btn style="width: 125px;" id="showBeaconButton" @click="showMarkers()">모든 비콘 보이기</v-btn>
         <v-btn style="width: 115px;" @click="deleteMarkers()">모든 비콘 삭제</v-btn>
       </div>
+
+      <div id="beaconInfoInput">
+        
+      </div>
   </div>
 </template>
 

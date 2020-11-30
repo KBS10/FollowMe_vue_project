@@ -14,7 +14,7 @@
 
     <!-- 비콘을 설정할 수 있는 지도 표시 -->
     <div id="GoogleMap">
-      <GoogleMap  :handelOnClick=eventOn />
+      <GoogleMap :handelOnClick="eventOn" />
     </div>
 
     <!-- 비콘에 대해 추가, 삭제, 이상 비콘 확인  -->
@@ -29,11 +29,9 @@
 
     <div v-switch="component">
       <div v-case="'비콘 추가 및 삭제'">
-        <Beacon_Info_Input id="beacon_input"/>
+        <Beacon_Info_Input id="beacon_input" />
       </div>
     </div>
-
-
   </div>
 </template>
 
@@ -42,7 +40,7 @@ import GoogleMap from "./GoogleMap/GoogleMap";
 import Beacon_Info from "./Beacon/Beacon_Info";
 import Beacon_Control from "./Beacon/Beacon_Control";
 import Beacon_Info_Input from "./Beacon/Beacon_Info_Input";
-// import io from "socket.io-client";
+import io from "socket.io-client";
 
 export default {
   components: {
@@ -51,15 +49,12 @@ export default {
     Beacon_Control,
     Beacon_Info_Input,
   },
-  props:[
-    'handelOnClick',
-  ]
-  ,
+  props: ["handelOnClick"],
   data() {
     return {
       eventOn: false,
       // 소켓 서버 접속
-      // socket: io("http://localhost:3000/"),
+      socket: io("http://172.26.2.137:3000/"),
       component: "비콘 추가 및 삭제",
       componentsArray: [
         "비콘 추가 및 삭제",
@@ -70,24 +65,42 @@ export default {
   created() {},
   mounted() {
     // 소켓 on으로 node.js 소켓서버에서 보내는 Data 받음
-    // this.socket.on("beaconInfo", (data) => {
-    //   this.$store.state.socketBeaconInfo = data;
-    //   console.log(this.$store.state.socketBeaconInfo)
-    // });
+    this.socket.on("beaconInfo", (data) => {
+      if (this.$store.state.socketBeaconInfo[0].Minor == data[0].Minor) {
+        this.$store.state.socketBeaconInfo[0].RSSI = data[0].RSSI;
+        this.$store.state.socketBeaconInfo[0].Error = data[0].Error;
+      } else if (this.$store.state.socketBeaconInfo[1].Minor == data[0].Minor) {
+        this.$store.state.socketBeaconInfo[1].RSSI = data[0].RSSI;
+        this.$store.state.socketBeaconInfo[1].Error = data[0].Error;
+      } else if (this.$store.state.socketBeaconInfo[2].Minor == data[0].Minor) {
+        this.$store.state.socketBeaconInfo[2].RSSI = data[0].RSSI;
+        this.$store.state.socketBeaconInfo[2].Error = data[0].Error;
+      }
+    });
+
+    this.socket.on("beaconError", (data) => {
+      if (this.$store.state.socketBeaconInfo[0].Minor == data.Minor) {
+        this.$store.state.socketBeaconInfo[0].Error = data.Error;
+      } else if (this.$store.state.socketBeaconInfo[1].Minor == data.Minor) {
+        this.$store.state.socketBeaconInfo[1].Error = data.Error;
+      } else if (this.$store.state.socketBeaconInfo[2].Minor == data.Minor) {
+        this.$store.state.socketBeaconInfo[2].Error = data.Error;
+      }
+    });
   },
   methods: {
     // 버튼에 따라 컴포넌트 변경하는 함수
     swapComponent: function (item) {
       this.component = item;
       console.log(this.component);
-      // 비콘 추가 및 삭제 true / 비콘 정보 및 신호 불량 비콘 확인 false 를통해 
+      // 비콘 추가 및 삭제 true / 비콘 정보 및 신호 불량 비콘 확인 false 를통해
       // 해당 페이지에서 구글 맵 marker를 set 제한
-      if(this.component == "비콘 추가 및 삭제"){
+      if (this.component == "비콘 추가 및 삭제") {
         this.eventOn = true;
-        console.log(this.eventOn)
-      }else if(this.component == "비콘 정보 및 신호 불량 비콘 확인"){
+        console.log(this.eventOn);
+      } else if (this.component == "비콘 정보 및 신호 불량 비콘 확인") {
         this.eventOn = false;
-        console.log(this.eventOn)
+        console.log(this.eventOn);
       }
     },
   },
@@ -112,7 +125,7 @@ export default {
   /* background-color: chartreuse; */
 }
 
-#beacon_input{
+#beacon_input {
   display: block;
   width: 100%;
 }

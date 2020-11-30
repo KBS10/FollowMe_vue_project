@@ -4,12 +4,12 @@
 
     <div class="BeaconRows">
       <div
-        v-for="beacon in this.$store.state.beacons"
-        :key="beacon"
+        v-for="(beacon, i) in this.$store.state.beacons"
+        :key="i"
         class="BeaconRows-BeaconRowWrap"
         data-term-luid="beacon-1"
       >
-        <span id="count">{{ beacon.beacon_count }} </span>
+        <span id="count">{{ i + 1 }} </span>
         <div class="Input_Beacon_Info">
           <input type="text" id="room" v-model="beacon.room" hidden />
 
@@ -42,7 +42,6 @@
 <script>
 // import axios from 'axios'
 
-let count = 1;
 class beaconInfo {
   room;
   uuid;
@@ -51,7 +50,6 @@ class beaconInfo {
   beacon_id_minor;
   lat;
   lng;
-  beacon_count = 1;
   constructor(room, uuid, beacon_scanner_id, major, beacon_id_minor, lat, lng) {
     this.room = room;
     this.uuid = uuid;
@@ -60,7 +58,6 @@ class beaconInfo {
     this.beacon_id_minor = beacon_id_minor;
     this.lat = lat;
     this.lng = lng;
-    this.beacon_count = count++;
   }
 }
 
@@ -98,27 +95,27 @@ export default {
     deleteBeaconInput() {
         console.log("삭제 버튼")
     },
-    axiosFunction() {
-      console.log("axios 통신");
-      console.log(this.$store.state.beacons)
-      // var data = {
-      //         beacon_id_minor : this.beacon_id_minor,
-      //         uuid : this.uuid,
-      //         major : this.major,
-      //         lat : this.lat,
-      //         lng : this.lng,
-      //         beacon_scanner_id : this.beacon_scanner_id,
-      //         room : "dfasdf",
-      // }
-      // const url = "http://192.168.0.8:8000/api/admin/beacon_create"
-      // axios.post(url, data)
-      // .then(function(response){
-      //     console.log(response);
-      // })
-      // .catch(function(error){
-      //     console.log(error)
-      // })
-    },
+    // axiosFunction() {
+    //   console.log("axios 통신");
+    //   console.log(this.$store.state.beacons)
+    //   var data = {
+    //           beacon_id_minor : this.beacon_id_minor,
+    //           uuid : this.uuid,
+    //           major : this.major,
+    //           lat : this.lat,
+    //           lng : this.lng,
+    //           beacon_scanner_id : this.beacon_scanner_id,
+    //           room : "dfasdf",
+    //   }
+    //   const url = "http://192.168.0.8:8000/api/admin/beacon_create"
+    //   axios.post(url, data)
+    //   .then(function(response){
+    //       console.log(response);
+    //   })
+    //   .catch(function(error){
+    //       console.log(error)
+    //   })
+    // },
   },
 };
 </script>

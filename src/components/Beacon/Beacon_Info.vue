@@ -2,7 +2,7 @@
   <div id="Beacon_Info">
     <h1>비콘 정보</h1>
 
-    <form id="search_Beacon_Info" method="post">
+    <!-- <form id="search_Beacon_Info" method="post">
       <select name="keyword" id="keyword">
         <option value="UUID">UUID</option>
         <option value="MAJOR">MAJOR</option>
@@ -17,7 +17,7 @@
         required="required"
       />
       <input type="submit" class="search" value="검색" />
-    </form>
+    </form> -->
     <!-- <input
       class="beacon-search"
       type="text"
@@ -33,6 +33,7 @@
         <td>Major</td>
         <td>Minor</td>
         <td>RSSI</td>
+        <td style="width : 170px">상태확인</td>
       </tr>
       <tr
         v-for="info in $store.state.socketBeaconInfo"
@@ -42,6 +43,7 @@
         <td>{{ info.Major }}</td>
         <td>{{ info.Minor }}</td>
         <td>{{ info.RSSI }}</td>
+        <td >{{ info.Error }}</td>
       </tr>
     </table>
   </div>

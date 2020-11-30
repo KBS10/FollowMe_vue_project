@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 class beaconInfo {
   room;
@@ -95,27 +95,18 @@ export default {
     deleteBeaconInput() {
         console.log("삭제 버튼")
     },
-    // axiosFunction() {
-    //   console.log("axios 통신");
-    //   console.log(this.$store.state.beacons)
-    //   var data = {
-    //           beacon_id_minor : this.beacon_id_minor,
-    //           uuid : this.uuid,
-    //           major : this.major,
-    //           lat : this.lat,
-    //           lng : this.lng,
-    //           beacon_scanner_id : this.beacon_scanner_id,
-    //           room : "dfasdf",
-    //   }
-    //   const url = "http://192.168.0.8:8000/api/admin/beacon_create"
-    //   axios.post(url, data)
-    //   .then(function(response){
-    //       console.log(response);
-    //   })
-    //   .catch(function(error){
-    //       console.log(error)
-    //   })
-    // },
+    axiosFunction() {
+      console.log("axios 통신");
+  
+      const url = "http://192.168.0.8:8000/api/admin/beacon_create"
+      axios.post(url, {"beacon" : this.$store.state.beacons})
+      .then(function(response){
+          console.log(response);
+      })
+      .catch(function(error){
+          console.log(error)
+      })
+    },
   },
 };
 </script>

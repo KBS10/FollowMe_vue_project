@@ -40,6 +40,7 @@ import GoogleMap from "./GoogleMap/GoogleMap";
 import Beacon_Info from "./Beacon/Beacon_Info";
 import Beacon_Control from "./Beacon/Beacon_Control";
 import Beacon_Info_Input from "./Beacon/Beacon_Info_Input";
+import axios from "axios";
 import io from "socket.io-client";
 
 export default {
@@ -55,11 +56,14 @@ export default {
       eventOn: false,
       // 소켓 서버 접속
       socket: io("http://172.26.2.137:3000/"),
+      // socket: io("http://192.168.0.32:3000/"),
       component: "비콘 추가 및 삭제",
       componentsArray: [
         "비콘 추가 및 삭제",
         "비콘 정보 및 신호 불량 비콘 확인",
       ],
+      beaconImage:
+        "https://user-images.githubusercontent.com/53847348/99767420-5ba24b80-2b46-11eb-8b3c-a9b686bb8c59.png",
     };
   },
   created() {},
@@ -77,7 +81,6 @@ export default {
         this.$store.state.socketBeaconInfo[2].Error = data[0].Error;
       }
     });
-
     this.socket.on("beaconError", (data) => {
       if (this.$store.state.socketBeaconInfo[0].Minor == data.Minor) {
         this.$store.state.socketBeaconInfo[0].Error = data.Error;
@@ -90,18 +93,50 @@ export default {
   },
   methods: {
     // 버튼에 따라 컴포넌트 변경하는 함수
-    swapComponent: function (item) {
+    swapComponent(item) {
       this.component = item;
       console.log(this.component);
       // 비콘 추가 및 삭제 true / 비콘 정보 및 신호 불량 비콘 확인 false 를통해
       // 해당 페이지에서 구글 맵 marker를 set 제한
       if (this.component == "비콘 추가 및 삭제") {
         this.eventOn = true;
-        console.log(this.eventOn);
       } else if (this.component == "비콘 정보 및 신호 불량 비콘 확인") {
         this.eventOn = false;
-        console.log(this.eventOn);
+
+        // console.log("axios 통신");
+        // const url = "http://192.168.0.8:8000/api/admin/beacon_setting_main";
+        const url = "http://172.26.3.122:8000/api/admin/beacon_setting_main";
+        axios
+          .get(url)
+          .then((response) => {
+            for (let i = 0; i < response.data.beacon_info.length; i++) {
+              // console.log(response.data.beacon_info[i].lat, response.data.beacon_info[i].lng)
+              this.addMarker(
+                response.data.beacon_info[i].lat,
+                response.data.beacon_info[i].lng
+              );
+            }
+
+            this.$store.state.beaconLocation = response.data;
+            console.log(this.$store.state.beaconLocation);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
+    },
+    addMarker(lat, lng) {
+      const icons = {
+        url: this.beaconImage,
+        scaledSize: new window.google.maps.Size(20, 25),
+        anchor: new window.google.maps.Point(10, 10),
+      };
+      const marker = new window.google.maps.Marker({
+        position: {lat, lng},
+        map: this.$store.state.map,
+        icon: icons,
+      });
+      this.$store.state.beaconMarkers.push(marker);
     },
   },
 };

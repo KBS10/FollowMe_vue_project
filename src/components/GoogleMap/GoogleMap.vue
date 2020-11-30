@@ -44,7 +44,7 @@ export default {
         document.getElementById("map"),
         this.mapOptions
       );
-
+      // console.log(this.$store.state.map)
       // 어떤 컴포넌트에서 this.map 객체를 받을 수 있게하는 Event
       EventBus.$emit("Map", this.map);
 
@@ -124,8 +124,6 @@ export default {
         icon: icons,
       });
       this.$store.state.markers.push(marker);
-
-      
     },
   },
 };

@@ -18,14 +18,6 @@
       />
       <input type="submit" class="search" value="검색" />
     </form> -->
-    <!-- <input
-      class="beacon-search"
-      type="text"
-      v-model="search"
-      placeholder="비콘 정보 검색"
-      @input="handleSearchInput"
-      @keydown.tab="KeydownTab"
-    /> -->
 
     <table id="show_Beacon_Info">
       <tr id="beaconCategory">
@@ -50,6 +42,7 @@
 </template>
 
 <script>
+// import axios from 'axios'
 export default {
   components: {},
   data() {
@@ -58,25 +51,9 @@ export default {
     };
   },
   created() {},
-  async mounted() {},
+  async mounted() {
+  },
   methods: {
-    // handleSearchInput(e) {
-    //   this.search = e.target.value;
-    //   if (this.search.length !== 0) {
-    //     clearTimeout(this.debounce);
-    //     this.debounce = setTimeout(() => {
-    //       const filteredList = this.stageInfoList.filter((item) =>
-    //         item.title.includes(this.search)
-    //       );
-    //       this.searchList = filteredList;
-    //     }, 500);
-    //   } else {
-    //     clearTimeout(this.debounce);
-    //     this.debounce = setTimeout(() => {
-    //       this.searchList = [];
-    //     }, 500);
-    //   }
-    // },
   },
 };
 </script>

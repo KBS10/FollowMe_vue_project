@@ -70,15 +70,16 @@ export default {
   mounted() {
     // 소켓 on으로 node.js 소켓서버에서 보내는 Data 받음
     this.socket.on("beaconInfo", (data) => {
-      if (this.$store.state.socketBeaconInfo[0].Minor == data[0].Minor) {
-        this.$store.state.socketBeaconInfo[0].RSSI = data[0].RSSI;
-        this.$store.state.socketBeaconInfo[0].Error = data[0].Error;
-      } else if (this.$store.state.socketBeaconInfo[1].Minor == data[0].Minor) {
-        this.$store.state.socketBeaconInfo[1].RSSI = data[0].RSSI;
-        this.$store.state.socketBeaconInfo[1].Error = data[0].Error;
-      } else if (this.$store.state.socketBeaconInfo[2].Minor == data[0].Minor) {
-        this.$store.state.socketBeaconInfo[2].RSSI = data[0].RSSI;
-        this.$store.state.socketBeaconInfo[2].Error = data[0].Error;
+      console.log(data)
+      if (this.$store.state.socketBeaconInfo[0].Minor == data.Minor) {
+        this.$store.state.socketBeaconInfo[0].RSSI = data.RSSI;
+        this.$store.state.socketBeaconInfo[0].Error = data.Error;
+      } else if (this.$store.state.socketBeaconInfo[1].Minor == data.Minor) {
+        this.$store.state.socketBeaconInfo[1].RSSI = data.RSSI;
+        this.$store.state.socketBeaconInfo[1].Error = data.Error;
+      } else if (this.$store.state.socketBeaconInfo[2].Minor == data.Minor) {
+        this.$store.state.socketBeaconInfo[2].RSSI = data.RSSI;
+        this.$store.state.socketBeaconInfo[2].Error = data.Error;
       }
     });
     this.socket.on("beaconError", (data) => {

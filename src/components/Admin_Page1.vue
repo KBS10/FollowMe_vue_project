@@ -106,7 +106,9 @@ export default {
 
         // console.log("axios 통신");
         // const url = "http://192.168.0.8:8000/api/admin/beacon_setting_main";
-        const url = "http://172.26.3.122:8000/api/admin/beacon_setting_main";
+        // const url = "http://172.26.3.122:8000/api/admin/beacon_setting_main";
+        const url = "http://49.143.18.165:8000/api/admin/beacon_setting_main";
+        
         axios
           .get(url)
           .then((response) => {
